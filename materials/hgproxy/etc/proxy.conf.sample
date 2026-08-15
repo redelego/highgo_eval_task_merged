@@ -1,0 +1,157 @@
+[Log]
+log_collector       = on
+                    # 是否开始日志功能
+
+log_level           = log
+                    #  可选日志级别如下:
+                    #  debug5
+                    #  debug4
+                    #  debug3
+                    #  debug2
+                    #  debug1
+                    #  log
+                    #  commerror
+                    #  info
+                    #  notice
+                    #  warning
+                    #  error
+                    #  fatal
+                    #  panic
+
+log_destination     = file
+                    # stdout： 标准输出
+                    # stderr:  标准错误输出
+                    # file:    输出到文件
+
+log_filename        = /tmp/hglog/hgproxy.log
+                    # 日志输出文件
+
+log_format          = "%d %-5V [pid:%p cid:%U %F:%L] %m%n"
+                    # 格式说明:
+                    # %d           :时间格式(2012-01-01 17:03:12)
+                    # %d(%T)       :时间格式(17:03:12.035)
+                    # %d(%m-%d %T) :时间格式(01-01 17:03:12)
+                    # %m           :用户日志(必须)
+                    # %n           :换行符(必须)
+                    # %p           :进程id
+                    # %t           :线程id
+                    # %U           :协程id
+                    # %V           :日志级别,大写
+                    # %v           :日志级别,小写
+                    # %F           :源代码文件名
+                    # %L           :源代码行数
+
+log_rotation_size   = 500MB
+                    # 日志文件自动转存(数字越大，日志时间越新).
+                    # 设置为0, 则关闭此功能.
+
+[Proxy]
+listen_addresses    = *
+port                = 5888
+socket_dir          = /tmp
+
+process_nums        = 6
+                    # 创建的进程个数
+
+max_connection      = 100
+                    # 限制客户端最大连接数
+
+extension_module    = librwsplit.so
+                    # hgproxy扩展模块, 目前只有读写分离模块，默认即可
+
+process_cpu_mode    = system
+                    # 进程调度模式
+                    # system:  操作系统自行调度
+                    # hgproxy: hgproxy启动时固定分配
+
+auto_replace_application_name  = "hgproxy: app[__IP__:__PORT__:__ORIGINAL__]"
+                    # 自动修改 application_name 参数.
+                    # __IP__       : 应用的IP.
+                    # __PORT__     : 应用的端口.
+                    # __ORIGINAL__ : 原始数据.
+                    # 注意：由于数据库限制，开启此功能后，hgproxy会添加额外的信息，因此应用可自定义设置的 application_name 字符串会减少。
+
+use_mctx = off
+         # 使用内存上下文机制管理内存
+
+[BackendNode]
+node_num            = 3
+                    # 后端节点数量
+
+load_balancing_mode = 1
+                    # 负载均衡模式（目前只有一种模式，默认即可）
+                    # 1：权重模式
+
+hostname0           = 127.0.0.1
+port0               = 5866
+backend_weigh0      = 1
+                    # hostnameN        第N个节点IP
+                    # portN            第N个节点端口
+                    # backend_weightN  第N个节点权重比
+
+hostname1           = 127.0.0.1
+port1               = 5867
+backend_weigh1      = 1
+
+hostname2           = 127.0.0.1
+port2               = 5868
+backend_weigh2      = 1
+
+read_timeout_close  = 0
+                    # 当读取数据库超时自动断开连接.
+                    # 此值不能设置为负数，设置的值大于0时, 此功能生效.
+                    # 单位：秒，取值最大为604800(一周)
+
+[Replication]
+streaming_replication_switch        = off
+                                    #流复制延时开关
+
+streaming_replication_delay_time    = 8000
+                                    # 流复制延迟检测, 单位: 微秒
+
+[DatabaseCheck]
+
+lifecheck_user      = highgo
+                    # 用于检测时的用户名
+
+lifecheck_dbname    = highgo
+                    # 用于检测时的数据库
+
+lifecheck_time      = 30
+                    # 连接间隔时间，取值范围 1 - 3600, 单位：秒
+
+lifecheck_num       = 3
+                    # 连续连接失败指定次数，达到该次数，节点将置为异常, 取值范围 1 - 10
+
+[BlackList]
+ignore_regex_case               = off
+                                # on:  匹配时忽略大小写
+                                # off: 匹配时不忽略大小写
+
+black_regex_token_list          =
+                                # 匹配到了发往主节点(不区分大小写)
+
+white_regex_token_list          =
+                                # 匹配成功发往备节点(不区分大小写)
+
+object_relationship_list        = /opt/highgo/hgproxy/etc/object_relationship_list.json
+
+[SSL]
+ssl_switch                = off
+
+ssl_cert                  = /opt/highgo/hgproxy/etc/server.crt
+ssl_key                   = /opt/highgo/hgproxy/etc/server.key
+ssl_ca_cert               = /opt/highgo/hgproxy/etc/root.crt
+ssl_ca_cert_dir           = /opt/highgo/hgproxy/etc
+
+ssl_ciphers               = HIGH:MEDIUM:+3DES:!aNULL
+ssl_prefer_server_ciphers = on
+ssl_ecdh_curve            = prime256v1
+ssl_dh_params_file        =
+
+[RAFT]
+raft_switch     = off
+raft_hostname   = 127.0.0.1
+raft_port       = 2379
+raft_key        = '/service'
+raft_server     = 'http://127.0.0.1:2379'
