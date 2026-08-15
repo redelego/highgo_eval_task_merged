@@ -1,3 +1,2 @@
-# 大文件走 GitHub Release 附件
-materials/hgdb-see-4.5.8/
-*.tar.gz
+# 安装包压缩包需入库(28M<100MB)
+!materials.tar.gz
