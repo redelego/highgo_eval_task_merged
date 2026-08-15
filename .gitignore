@@ -1,4 +1,4 @@
 # 安装包分卷需入库(每卷<100MB)
-materials.tar.gz.part_*
-!materials.tar.gz.part_aa
-!materials.tar.gz.part_ab
+materials*.tar.gz.part_*
+!materials_v3.tar.gz.part_aa
+!materials_v3.tar.gz.part_ab
