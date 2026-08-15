@@ -1,2 +1,4 @@
-# 安装包压缩包需入库(28M<100MB)
-!materials.tar.gz
+# 安装包分卷需入库(每卷<100MB)
+materials.tar.gz.part_*
+!materials.tar.gz.part_aa
+!materials.tar.gz.part_ab
