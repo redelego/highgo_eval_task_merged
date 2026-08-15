@@ -22,8 +22,8 @@ tar xzf task-materials.tar.gz && cd highgo_eval_task_merged-main
 
 ```bash
 # 合并分卷（仓库根目录下）
-cat materials_full_v2.tar.gz.part_* > materials_full_v2.tar.gz
-tar xzf materials_full_v2.tar.gz   # 解压出完整 materials/（含 hgdb-see-4.5.8/）
+cat materials_v3.tar.gz.part_* > materials_v3.tar.gz
+tar xzf materials_v3.tar.gz   # 解压出完整 materials/（含 hgdb-see-4.5.8/）
 ```
 
 解压后 materials/ 完整结构：
